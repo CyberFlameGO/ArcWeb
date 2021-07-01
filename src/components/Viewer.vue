@@ -14,52 +14,56 @@
         </ul>
       </div>
       <template v-if="view === 0">
-        <div class="box">
-          <h1>Server Info</h1>
-          <b>Version:</b> {{profile.minecraft.version}}
-          <br/>
-          <b>Online Mode:</b> {{onlineModeText(profile.minecraft.online_mode)}}
-          <br/>
-          <GC v-for="gc in profile.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
-        </div>
-        <div class="box">
-          <h1>System</h1>
-          <div class="sub-box">
-            <h2>CPU</h2>
-            <b>Model:</b> {{profile.system.cpu.model}}
+        <div class="boxes">
+          <div class="box">
+            <h1>Server Info</h1>
+            <b>Version:</b> {{profile.minecraft.version}}
             <br/>
-            <b>Cores/Threads:</b> {{profile.system.cpu.cores}}/{{profile.system.cpu.threads}}
+            <b>Online Mode:</b> {{onlineModeText(profile.minecraft.online_mode)}}
             <br/>
-            <b>Frequency:</b> {{(1e-9 * profile.system.cpu.frequency).toFixed(2)}}GHz
+            <GC v-for="gc in profile.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
           </div>
-          <div class="sub-box">
-            <h2>Memory</h2>
-            <b>Physical:</b> {{bytesToSize(profile.system.memory.physical)}}
-            <br/>
-            <b>Swap:</b> {{bytesToSize(profile.system.memory.swap)}}
-            <br/>
-            <b>Total:</b> {{bytesToSize(profile.system.memory.total)}}
+          <div class="box">
+            <h1>System</h1>
+            <div class="sub-box">
+              <h2>CPU</h2>
+              <b>Model:</b> {{profile.system.cpu.model}}
+              <br/>
+              <b>Cores/Threads:</b> {{profile.system.cpu.cores}}/{{profile.system.cpu.threads}}
+              <br/>
+              <b>Frequency:</b> {{(1e-9 * profile.system.cpu.frequency).toFixed(2)}}GHz
+            </div>
+            <div class="sub-box">
+              <h2>Memory</h2>
+              <b>Physical:</b> {{bytesToSize(profile.system.memory.physical)}}
+              <br/>
+              <b>Swap:</b> {{bytesToSize(profile.system.memory.swap)}}
+              <br/>
+              <b>Total:</b> {{bytesToSize(profile.system.memory.total)}}
+            </div>
+            <div class="sub-box">
+              <h2>Operating System</h2>
+              {{profile.system.os.manufacturer}} {{profile.system.os.family}} ({{profile.system.os.bitness}} bit)
+              <br/>
+              {{profile.system.os.version}}
+            </div>
           </div>
-          <div class="sub-box">
-            <h2>Operating System</h2>
-            {{profile.system.os.manufacturer}} {{profile.system.os.family}} ({{profile.system.os.bitness}} bit)
+          <div class="box">
+            <h1>Virtual Machine</h1>
+            <b>Version:</b> {{profile.system.vm.version}}
             <br/>
-            {{profile.system.os.version}}
-           </div>
-        </div>
-        <div class="box">
-          <h1>Virtual Machine</h1>
-          <b>Version:</b> {{profile.system.vm.version}}
-          <br/>
-          <b>Vendor:</b> {{profile.system.vm.vendor}}
-          <br/>
-          <b>VM:</b> {{profile.system.vm.vm}}
-          <br/>
-          <b>Runtime Name:</b> {{profile.system.vm.runtimeName}}
-          <br/>
-          <b>Runtime Version:</b> {{profile.system.vm.runtimeVersion}}
-          <br/>
-          <b>Flags:</b> {{profile.system.vm.flags.join(' ')}}
+            <b>Vendor:</b> {{profile.system.vm.vendor}}
+            <br/>
+            <b>VM:</b> {{profile.system.vm.vm}}
+            <br/>
+            <b>Runtime Name:</b> {{profile.system.vm.runtimeName}}
+            <br/>
+            <b>Runtime Version:</b> {{profile.system.vm.runtimeVersion}}
+            <br/>
+            <br/>
+            <b>Flags:</b>
+            <p>{{profile.system.vm.flags.join(' ')}}</p>
+          </div>
         </div>
       </template>
       <template v-else-if="view === 1">
