@@ -1,15 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
+* {
+    --color: #F1FAEE;
+    --accent-color: #E63946;
+    --background-color: #15191F;
+    --secondary-background-color: #252F3D;
+    --tertiary-backgroun-color: #374354;
+}
+
 html, body {
-    color: #F1FAEE;
-    background-color: #15191F;
+    color: var(--color);
+    background-color: var(--background-color);
     font-family: 'JetBrains Mono', monospace;
     font-size: 10pt;
+    padding: 0;
+    margin: 30px 0 70px;
 }
 
 h1 {
     text-decoration: underline;
-    text-decoration-color: #E63946;
+    text-decoration-color: var(--accent-color);
 }
 
 .page {
@@ -18,22 +28,26 @@ h1 {
 }
 
 .page b {
-    color: #E63946;
+    color: var(--accent-color);
     font-weight: normal;
 }
 
-.viewer-nav ul {
+nav ul {
+    z-index: 2;
     margin: 0;
     padding: 0;
     overflow: hidden;
     text-align: center;
-    border-radius: 10px;
     list-style-type: none;
-    background-color: #E63946;
+    background-color: var(--accent-color);
+    background-attachment: scroll;
+    width: 100%;
+    position: fixed;
+    top: 0;
 }
 
-.viewer-nav li {
-    color: #F1FAEE;
+nav li {
+    color: var(--color);
     cursor: pointer;
     text-align: center;
     font-weight: bolder;
@@ -41,10 +55,14 @@ h1 {
     padding: 15px 50px 15px;
 }
 
-.viewer-nav .active {
+nav .active {
     text-decoration: underline;
-    text-decoration-color: #15191F;
+    text-decoration-color: var(--background-color);
     text-decoration-thickness: 3px;
+}
+
+nav .toggle {
+    text-align: right;
 }
 
 .boxes {
@@ -60,7 +78,7 @@ h1 {
     margin: 20px;
     padding: 20px;
     text-align: center;
-    background-color: #252F3D;
+    background-color: var(--secondary-background-color);
     border-radius: 10px;
 }
 
@@ -69,14 +87,14 @@ h1 {
     text-align: left;
     font-style: normal;
     border-radius: 10px;
-    background-color: #374354;
+    background-color: var(--tertiary-backgroun-color);
 }
 
 .config {
     padding: 20px 40px 20px 40px;
-    margin: 30px 30px;
+    margin: 50px 30px -20px;
     border-radius: 10px;
-    background-color: #252F3D;
+    background-color: var(--secondary-background-color);
 }
 
 .config h1 {
@@ -89,9 +107,13 @@ h1 {
     margin-top: 40px;
     font-size: 14pt;
     border-radius: 10px;
-    background-color: #374354;
+    background-color: var(--tertiary-backgroun-color);
 }
 
 .config .rotate {
     transform: rotate(90deg);
+}
+
+font-awesome-icon {
+    z-index: 1;
 }

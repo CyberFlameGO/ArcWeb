@@ -2,17 +2,17 @@
   <div>
     <template v-if="status === 'LOADING'" />
     <template v-else-if="status === '404'">
-      <Error404 />
+      <Error404/>
     </template>
     <template v-else>
-      <div class="viewer-nav">
+      <nav>
         <ul>
           <li :class="{ active: view === 0 }" @click="view = 0">Server</li>
           <li :class="{ active: view === 1 }" @click="view = 1">CPU</li>
           <li :class="{ active: view === 2 }" @click="view = 2">Memory</li>
           <li :class="{ active: view === 3 }" @click="view = 3">Configs</li>
         </ul>
-      </div>
+      </nav>
       <template v-if="view === 0">
         <div class="boxes">
           <div class="box">
