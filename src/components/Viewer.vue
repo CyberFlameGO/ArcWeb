@@ -8,17 +8,21 @@
       <div class="viewer-nav">
         <ul>
           <li :class="{ active: view === 0 }" @click="view = 0">Server</li>
-          <li :class="{ active: view === 1 }" @click="view = 1">Timings</li>
-          <li :class="{ active: view === 2 }" @click="view = 2">Configs</li>
+          <li :class="{ active: view === 1 }" @click="view = 1">CPU</li>
+          <li :class="{ active: view === 2 }" @click="view = 2">Memory</li>
+          <li :class="{ active: view === 3 }" @click="view = 3">Configs</li>
         </ul>
       </div>
       <template v-if="view === 0">
         server info :O
       </template>
       <template v-else-if="view === 1">
-        actual profiler!
+        accurate cpu profiler!
       </template>
       <template v-else-if="view === 2">
+        accurate memory viewer!
+      </template>
+      <template v-else-if="view === 3">
         configurations (with important data removed) <i>gasps</i>
       </template>
     </template>
