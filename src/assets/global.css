@@ -46,3 +46,23 @@ h1 {
     text-decoration-color: #15191F;
     text-decoration-thickness: 3px;
 }
+
+.config {
+    padding: 20px;
+    margin: 30px 30px;
+    border-radius: 10px;
+    background-color: #252F3D;
+}
+
+.config h1 {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.config pre {
+    padding: 5px;
+    margin-top: 40px;
+    font-size: 14pt;
+    border-radius: 10px;
+    background-color: #374354;
+}
