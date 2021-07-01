@@ -23,7 +23,10 @@
         accurate memory viewer!
       </template>
       <template v-else-if="view === 3">
-        configurations (with important data removed) <i>gasps</i>
+        <!-- eslint-disable-next-line vue/require-v-for-key -->
+        <div v-for="config in profile.minecraft.configs">
+          <Config :filename="config.file" :content="config.content"/>
+        </div>
       </template>
     </template>
   </div>
@@ -33,7 +36,8 @@
 import Pbf from 'pbf'
 import { Profile } from '@/proto'
 
-import Error404 from '../views/error/Error404'
+import Config from "@/components/viewer/Config";
+import Error404 from '@/views/error/Error404'
 
 export default {
   name: 'Viewer',
@@ -68,6 +72,7 @@ export default {
     })()
   },
   components: {
+    Config,
     Error404
   }
 }
