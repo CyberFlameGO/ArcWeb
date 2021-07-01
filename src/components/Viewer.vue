@@ -14,7 +14,53 @@
         </ul>
       </div>
       <template v-if="view === 0">
-        server info :O
+        <div class="box">
+          <h1>Server Info</h1>
+          <b>Version:</b> {{profile.minecraft.version}}
+          <br/>
+          <b>Online Mode:</b> {{onlineModeText(profile.minecraft.online_mode)}}
+          <br/>
+          <GC v-for="gc in profile.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
+        </div>
+        <div class="box">
+          <h1>System</h1>
+          <div class="sub-box">
+            <h2>CPU</h2>
+            <b>Model:</b> {{profile.system.cpu.model}}
+            <br/>
+            <b>Cores/Threads:</b> {{profile.system.cpu.cores}}/{{profile.system.cpu.threads}}
+            <br/>
+            <b>Frequency:</b> {{(1e-9 * profile.system.cpu.frequency).toFixed(2)}}GHz
+          </div>
+          <div class="sub-box">
+            <h2>Memory</h2>
+            <b>Physical:</b> {{bytesToSize(profile.system.memory.physical)}}
+            <br/>
+            <b>Swap:</b> {{bytesToSize(profile.system.memory.swap)}}
+            <br/>
+            <b>Total:</b> {{bytesToSize(profile.system.memory.total)}}
+          </div>
+          <div class="sub-box">
+            <h2>Operating System</h2>
+            {{profile.system.os.manufacturer}} {{profile.system.os.family}} ({{profile.system.os.bitness}} bit)
+            <br/>
+            {{profile.system.os.version}}
+           </div>
+        </div>
+        <div class="box">
+          <h1>Virtual Machine</h1>
+          <b>Version:</b> {{profile.system.vm.version}}
+          <br/>
+          <b>Vendor:</b> {{profile.system.vm.vendor}}
+          <br/>
+          <b>VM:</b> {{profile.system.vm.vm}}
+          <br/>
+          <b>Runtime Name:</b> {{profile.system.vm.runtimeName}}
+          <br/>
+          <b>Runtime Version:</b> {{profile.system.vm.runtimeVersion}}
+          <br/>
+          <b>Flags:</b> {{profile.system.vm.flags.join(' ')}}
+        </div>
       </template>
       <template v-else-if="view === 1">
         accurate cpu profiler!
@@ -22,10 +68,8 @@
       <template v-else-if="view === 2">
         accurate memory viewer!
       </template>
-      <template v-else-if="view === 3">
-        <div v-for="config in profile.minecraft.configs">
-          <Config :filename="config.file" :content="config.content"/>
-        </div>
+      <template class="configs" v-else-if="view === 3">
+        <Config v-for="config in profile.minecraft.configs" :filename="config.file" :content="config.content"/>
       </template>
     </template>
   </div>
@@ -35,7 +79,8 @@
 import Pbf from 'pbf'
 import { Profile } from '@/proto'
 
-import Config from "@/components/viewer/Config";
+import Config from '@/components/viewer/Config'
+import GC from '@/components/viewer/GC'
 import Error404 from '@/views/error/Error404'
 
 export default {
@@ -59,6 +104,12 @@ export default {
         case 3:
           return 'VELOCITY'
       }
+    },
+    bytesToSize(bytes) {
+      if (bytes === 0) return '0B';
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + sizes[i];
     }
   },
   beforeMount() {
@@ -72,6 +123,7 @@ export default {
   },
   components: {
     Config,
+    GC,
     Error404
   }
 }

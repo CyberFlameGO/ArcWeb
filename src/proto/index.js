@@ -89,10 +89,10 @@ Profile.SystemInfo.OS._readField = function (tag, obj, pbf) {
 Profile.MinecraftInfo = {};
 
 Profile.MinecraftInfo.read = function (pbf, end) {
-    return pbf.readFields(Profile.MinecraftInfo._readField, {version: null, online_mode: 0, configs: [], plugins: []}, end);
+    return pbf.readFields(Profile.MinecraftInfo._readField, {version: "", online_mode: 0, configs: [], plugins: []}, end);
 };
 Profile.MinecraftInfo._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.version = Profile.MinecraftInfo.Version.read(pbf, pbf.readVarint() + pbf.pos);
+    if (tag === 1) obj.version = pbf.readString();
     else if (tag === 2) obj.online_mode = pbf.readVarint();
     else if (tag === 3) obj.configs.push(Profile.MinecraftInfo.Config.read(pbf, pbf.readVarint() + pbf.pos));
     else if (tag === 4) obj.plugins.push(Profile.MinecraftInfo.Plugin.read(pbf, pbf.readVarint() + pbf.pos));
@@ -115,19 +115,6 @@ Profile.MinecraftInfo.OnlineMode = {
         "value": 3,
         "options": {}
     }
-};
-
-// Profile.MinecraftInfo.Version ========================================
-
-Profile.MinecraftInfo.Version = {};
-
-Profile.MinecraftInfo.Version.read = function (pbf, end) {
-    return pbf.readFields(Profile.MinecraftInfo.Version._readField, {full: "", api: "", mc: ""}, end);
-};
-Profile.MinecraftInfo.Version._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.full = pbf.readString();
-    else if (tag === 2) obj.api = pbf.readString();
-    else if (tag === 3) obj.mc = pbf.readString();
 };
 
 // Profile.MinecraftInfo.Config ========================================
