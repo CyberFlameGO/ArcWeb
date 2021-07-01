@@ -22,3 +22,27 @@ h1 {
     color: #E63946;
     font-weight: normal;
 }
+
+.viewer-nav ul {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-align: center;
+    list-style-type: none;
+    background-color: #E63946;
+}
+
+.viewer-nav li {
+    color: #F1FAEE;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bolder;
+    display: inline-block;
+    padding: 15px 50px 15px;
+}
+
+.viewer-nav .active {
+    text-decoration: underline;
+    text-decoration-color: #15191F;
+    text-decoration-thickness: 3px;
+}

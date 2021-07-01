@@ -5,14 +5,29 @@
       <Error404 />
     </template>
     <template v-else>
-      {{profile}}
+      <div class="viewer-nav">
+        <ul>
+          <li :class="{ active: view === 0 }" @click="view = 0">Server</li>
+          <li :class="{ active: view === 1 }" @click="view = 1">Timings</li>
+          <li :class="{ active: view === 2 }" @click="view = 2">Configs</li>
+        </ul>
+      </div>
+      <template v-if="view === 0">
+        server info :O
+      </template>
+      <template v-else-if="view === 1">
+        actual profiler!
+      </template>
+      <template v-else-if="view === 2">
+        configurations (with important data removed) <i>gasps</i>
+      </template>
     </template>
   </div>
 </template>
 
 <script>
 import Pbf from 'pbf'
-import { Profile } from '@/proto/proto'
+import { Profile } from '@/proto'
 
 import Error404 from '../views/error/Error404'
 
@@ -21,7 +36,22 @@ export default {
   data() {
     return {
       status: 'LOADING',
-      profile: ''
+      profile: Profile,
+      view: 0
+    }
+  },
+  methods: {
+    onlineModeText(num) {
+      switch (num) {
+        case 0:
+          return 'ENABLED'
+        case 1:
+          return 'DISABLED'
+        case 2:
+          return 'BUNGEE'
+        case 3:
+          return 'VELOCITY'
+      }
     }
   },
   beforeMount() {
