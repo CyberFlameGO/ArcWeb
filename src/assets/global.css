@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-html {
+html, body {
     color: #F1FAEE;
     background-color: #15191F;
-
     font-family: 'JetBrains Mono', monospace;
     font-size: 10pt;
 }
@@ -54,16 +53,15 @@ h1 {
 }
 
 .boxes .box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex: 1;
     margin: 20px;
     padding: 20px;
     text-align: center;
     background-color: #252F3D;
     border-radius: 10px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .boxes .box .text-box {

@@ -32,14 +32,14 @@ Profile.SystemInfo._readField = function (tag, obj, pbf) {
 Profile.SystemInfo.VMInfo = {};
 
 Profile.SystemInfo.VMInfo.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.VMInfo._readField, {version: "", vendor: "", vm: "", runtimeName: "", runtimeVersion: "", flags: []}, end);
+    return pbf.readFields(Profile.SystemInfo.VMInfo._readField, {version: "", vendor: "", vm: "", runtime_name: "", runtime_version: "", flags: []}, end);
 };
 Profile.SystemInfo.VMInfo._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.version = pbf.readString();
     else if (tag === 2) obj.vendor = pbf.readString();
     else if (tag === 3) obj.vm = pbf.readString();
-    else if (tag === 4) obj.runtimeName = pbf.readString();
-    else if (tag === 5) obj.runtimeVersion = pbf.readString();
+    else if (tag === 4) obj.runtime_name = pbf.readString();
+    else if (tag === 5) obj.runtime_version = pbf.readString();
     else if (tag === 6) obj.flags.push(pbf.readString());
 };
 
@@ -62,12 +62,13 @@ Profile.SystemInfo.CPU._readField = function (tag, obj, pbf) {
 Profile.SystemInfo.Memory = {};
 
 Profile.SystemInfo.Memory.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.Memory._readField, {physical: 0, swap: 0, virtual: 0}, end);
+    return pbf.readFields(Profile.SystemInfo.Memory._readField, {physical: 0, swap: 0, virtual: 0, debug_symbols: false}, end);
 };
 Profile.SystemInfo.Memory._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.physical = pbf.readVarint();
     else if (tag === 2) obj.swap = pbf.readVarint();
     else if (tag === 3) obj.virtual = pbf.readVarint();
+    else if (tag === 4) obj.debug_symbols = pbf.readBoolean();
 };
 
 // Profile.SystemInfo.OS ========================================

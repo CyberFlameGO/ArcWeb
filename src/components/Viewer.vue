@@ -58,9 +58,9 @@
               <br/>
               <b>VM:</b> {{profile.system.vm.vm}}
               <br/>
-              <b>Runtime Name:</b> {{profile.system.vm.runtimeName}}
+              <b>Runtime Name:</b> {{profile.system.vm.runtime_name}}
               <br/>
-              <b>Runtime Version:</b> {{profile.system.vm.runtimeVersion}}
+              <b>Runtime Version:</b> {{profile.system.vm.runtime_version}}
               <br/>
               <br/>
             </p>
@@ -70,10 +70,17 @@
         </div>
       </template>
       <template v-else-if="view === 1">
-        accurate cpu profiler!
+        todo: cpu profiler
       </template>
       <template v-else-if="view === 2">
-        accurate memory viewer!
+        <div v-if="!profile.system.memory.debug_symbols" class="page">
+          <br/>
+          <h1>Memory Profile Disabled</h1>
+          <p>This profile did capture memory information, are debug symbols installed?</p>
+        </div>
+        <div v-else>
+          todo: memory profiler
+        </div>
       </template>
       <template class="configs" v-else-if="view === 3">
         <Config v-for="config in profile.minecraft.configs" :filename="config.file" :content="config.content"/>
