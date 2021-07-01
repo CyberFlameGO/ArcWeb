@@ -5,11 +5,12 @@
 var Profile = exports.Profile = {};
 
 Profile.read = function (pbf, end) {
-    return pbf.readFields(Profile._readField, {system: null, minecraft: null}, end);
+    return pbf.readFields(Profile._readField, {system: null, minecraft: null, gcs: []}, end);
 };
 Profile._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.system = Profile.SystemInfo.read(pbf, pbf.readVarint() + pbf.pos);
     else if (tag === 2) obj.minecraft = Profile.MinecraftInfo.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 3) obj.gcs.push(Profile.GC.read(pbf, pbf.readVarint() + pbf.pos));
 };
 
 // Profile.SystemInfo ========================================
@@ -152,4 +153,18 @@ Profile.MinecraftInfo.Plugin._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.name = pbf.readString();
     else if (tag === 2) obj.version = pbf.readString();
     else if (tag === 3) obj.author = pbf.readString();
+};
+
+// Profile.GC ========================================
+
+Profile.GC = {};
+
+Profile.GC.read = function (pbf, end) {
+    return pbf.readFields(Profile.GC._readField, {name: "", total: 0, time: 0, frequency: 0}, end);
+};
+Profile.GC._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.name = pbf.readString();
+    else if (tag === 2) obj.total = pbf.readVarint();
+    else if (tag === 3) obj.time = pbf.readDouble();
+    else if (tag === 4) obj.frequency = pbf.readVarint();
 };

@@ -3,6 +3,7 @@ syntax = "proto3";
 message Profile {
   SystemInfo system = 1;
   MinecraftInfo minecraft = 2;
+  repeated GC gcs = 3;
 
   message SystemInfo {
     VMInfo vm = 1;
@@ -69,5 +70,12 @@ message Profile {
       string version = 2;
       string author = 3;
     }
+  }
+
+  message GC {
+    string name = 1;
+    uint64 total = 2;
+    double time = 3;
+    uint64 frequency = 4;
   }
 }

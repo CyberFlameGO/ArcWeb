@@ -23,7 +23,6 @@
         accurate memory viewer!
       </template>
       <template v-else-if="view === 3">
-        <!-- eslint-disable-next-line vue/require-v-for-key -->
         <div v-for="config in profile.minecraft.configs">
           <Config :filename="config.file" :content="config.content"/>
         </div>
