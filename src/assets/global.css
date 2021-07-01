@@ -50,8 +50,7 @@ h1 {
 
 .boxes {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: stretch;
 }
 
 .boxes .box {
@@ -61,11 +60,16 @@ h1 {
     text-align: center;
     background-color: #252F3D;
     border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.boxes .box p {
+.boxes .box .text-box {
     padding: 5px;
     text-align: left;
+    font-style: normal;
     border-radius: 10px;
     background-color: #374354;
 }

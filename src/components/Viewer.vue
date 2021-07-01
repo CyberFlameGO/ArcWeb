@@ -16,14 +16,6 @@
       <template v-if="view === 0">
         <div class="boxes">
           <div class="box">
-            <h1>Server Info</h1>
-            <b>Version:</b> {{profile.minecraft.version}}
-            <br/>
-            <b>Online Mode:</b> {{onlineModeText(profile.minecraft.online_mode)}}
-            <br/>
-            <GC v-for="gc in profile.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
-          </div>
-          <div class="box">
             <h1>System</h1>
             <div class="sub-box">
               <h2>CPU</h2>
@@ -39,30 +31,41 @@
               <br/>
               <b>Swap:</b> {{bytesToSize(profile.system.memory.swap)}}
               <br/>
-              <b>Total:</b> {{bytesToSize(profile.system.memory.total)}}
+              <b>Virtual:</b> {{bytesToSize(profile.system.memory.virtual)}}
+              <br/>
+              <b>Total: </b> {{bytesToSize(profile.system.memory.physical + profile.system.memory.swap)}}
             </div>
             <div class="sub-box">
               <h2>Operating System</h2>
-              {{profile.system.os.manufacturer}} {{profile.system.os.family}} ({{profile.system.os.bitness}} bit)
-              <br/>
-              {{profile.system.os.version}}
+              {{profile.system.os.manufacturer}} {{profile.system.os.family}} {{profile.system.os.version}} ({{profile.system.os.bitness}} bit)
             </div>
           </div>
           <div class="box">
+            <h1>Server Info</h1>
+            <p>
+              <b>Version:</b> {{profile.minecraft.version}}
+              <br/>
+              <b>Online Mode:</b> {{onlineModeText(profile.minecraft.online_mode)}}
+              <GC v-for="gc in profile.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
+            </p>
+          </div>
+          <div class="box">
             <h1>Virtual Machine</h1>
-            <b>Version:</b> {{profile.system.vm.version}}
-            <br/>
-            <b>Vendor:</b> {{profile.system.vm.vendor}}
-            <br/>
-            <b>VM:</b> {{profile.system.vm.vm}}
-            <br/>
-            <b>Runtime Name:</b> {{profile.system.vm.runtimeName}}
-            <br/>
-            <b>Runtime Version:</b> {{profile.system.vm.runtimeVersion}}
-            <br/>
-            <br/>
+            <p>
+              <b>Version:</b> {{profile.system.vm.version}}
+              <br/>
+              <b>Vendor:</b> {{profile.system.vm.vendor}}
+              <br/>
+              <b>VM:</b> {{profile.system.vm.vm}}
+              <br/>
+              <b>Runtime Name:</b> {{profile.system.vm.runtimeName}}
+              <br/>
+              <b>Runtime Version:</b> {{profile.system.vm.runtimeVersion}}
+              <br/>
+              <br/>
+            </p>
             <b>Flags:</b>
-            <p>{{profile.system.vm.flags.join(' ')}}</p>
+            <p class="text-box">{{profile.system.vm.flags.join(' ')}}</p>
           </div>
         </div>
       </template>

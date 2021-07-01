@@ -62,12 +62,12 @@ Profile.SystemInfo.CPU._readField = function (tag, obj, pbf) {
 Profile.SystemInfo.Memory = {};
 
 Profile.SystemInfo.Memory.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.Memory._readField, {physical: 0, swap: 0, total: 0}, end);
+    return pbf.readFields(Profile.SystemInfo.Memory._readField, {physical: 0, swap: 0, virtual: 0}, end);
 };
 Profile.SystemInfo.Memory._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.physical = pbf.readVarint();
     else if (tag === 2) obj.swap = pbf.readVarint();
-    else if (tag === 3) obj.total = pbf.readVarint();
+    else if (tag === 3) obj.virtual = pbf.readVarint();
 };
 
 // Profile.SystemInfo.OS ========================================
