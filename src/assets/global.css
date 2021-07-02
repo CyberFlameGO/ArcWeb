@@ -1,9 +1,18 @@
+
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-* {
+:root {
     --color: #F1FAEE;
     --accent-color: #E63946;
     --background-color: #15191F;
+    --secondary-background-color: #252F3D;
+    --tertiary-backgroun-color: #374354;
+}
+
+[theme="light"] {
+    --color: #15191F;
+    --accent-color: #E63946;
+    --background-color: #F1FAEE;
     --secondary-background-color: #252F3D;
     --tertiary-backgroun-color: #374354;
 }
