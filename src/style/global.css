@@ -126,3 +126,7 @@ nav .toggle {
 font-awesome-icon {
     z-index: 1;
 }
+
+highlight {
+    background-color: transparent;
+}
