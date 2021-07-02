@@ -1,5 +1,4 @@
 <template>
-  todo: graph
 </template>
 
 <script>
