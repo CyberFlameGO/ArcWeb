@@ -12,11 +12,13 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/vue-fontawesome": "^3.0.0-4",
     "@highlightjs/vue-plugin": "2.0.1",
+    "apexcharts": "^3.27.1",
     "core-js": "^3.6.5",
     "highlight.js": "^11.0.1",
     "pbf": "^3.2.1",
     "vue": "^3.0.0",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vue3-apexcharts": "^1.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -68,6 +68,7 @@
             <p class="text-box">{{profile.system.vm.flags.join(' ')}}</p>
           </div>
         </div>
+        <Graph :graph="profile.graph"/>
       </template>
       <template v-else-if="view === 1">
         todo: cpu profiler
@@ -95,6 +96,7 @@ import { Profile } from '@/proto'
 
 import Config from '@/components/viewer/Config'
 import GC from '@/components/viewer/GC'
+import Graph from '@/components/viewer/Graph'
 import Error404 from '@/views/error/Error404'
 
 export default {
@@ -138,6 +140,7 @@ export default {
   components: {
     Config,
     GC,
+    Graph,
     Error404
   }
 }

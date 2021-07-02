@@ -1,5 +1,5 @@
-
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+@import 'highlight.css';
 
 :root {
     --color: #F1FAEE;
@@ -12,9 +12,9 @@
 [theme="light"] {
     --color: #15191F;
     --accent-color: #E63946;
-    --background-color: #F1FAEE;
-    --secondary-background-color: #252F3D;
-    --tertiary-backgroun-color: #374354;
+    --background-color: #ECEFF6;
+    --secondary-background-color: #FFFFFF;
+    --tertiary-backgroun-color: #DEE0E3;
 }
 
 html, body {
@@ -125,8 +125,4 @@ nav .toggle {
 
 font-awesome-icon {
     z-index: 1;
-}
-
-highlight {
-    background-color: transparent;
 }

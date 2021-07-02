@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Arc',
+  name: 'App',
   mounted() {
     switch (localStorage.getItem('theme').toLowerCase()) {
       case 'light':
