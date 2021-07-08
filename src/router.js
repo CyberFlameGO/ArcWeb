@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home'
-import Viewer from '@/components/Viewer'
-import Error404 from '@/views/error/Error404'
+import Home from './views/Home'
+import Viewer from './components/Viewer'
+import Error404 from './views/error/Error404'
 
 export default createRouter({
     history: createWebHistory(),

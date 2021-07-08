@@ -1,8 +1,5 @@
-<template>
-</template>
-
 <script>
-import Graph from '@/proto'
+import Graph from '~/proto'
 
 export default {
   name: 'Graph',
