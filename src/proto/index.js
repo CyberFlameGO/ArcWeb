@@ -2,130 +2,150 @@
 
 // Profile ========================================
 
-var Profile = exports.Profile = {};
+const Profile = exports.Profile = {};
 
 Profile.read = function (pbf, end) {
-    return pbf.readFields(Profile._readField, {graph: null, system: null, minecraft: null, gcs: []}, end);
+    return pbf.readFields(Profile._readField, {profiler: null, info: null}, end);
 };
 Profile._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.graph = Profile.Graph.read(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 2) obj.system = Profile.SystemInfo.read(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 3) obj.minecraft = Profile.MinecraftInfo.read(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 4) obj.gcs.push(Profile.GC.read(pbf, pbf.readVarint() + pbf.pos));
+    if (tag === 1) obj.profiler = Profile.Profiler.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 2) obj.info = Profile.Info.read(pbf, pbf.readVarint() + pbf.pos);
 };
 
-// Profile.Graph ========================================
+// Profile.Profiler ========================================
 
-Profile.Graph = {};
+Profile.Profiler = {};
 
-Profile.Graph.read = function (pbf, end) {
-    return pbf.readFields(Profile.Graph._readField, {data: []}, end);
+Profile.Profiler.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler._readField, {cpu: null}, end);
 };
-Profile.Graph._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.data.push(Profile.Graph.GraphData.read(pbf, pbf.readVarint() + pbf.pos));
+Profile.Profiler._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.cpu = Profile.Profiler.CPU.read(pbf, pbf.readVarint() + pbf.pos);
 };
 
-// Profile.Graph.GraphData ========================================
+// Profile.Profiler.CPU ========================================
 
-Profile.Graph.GraphData = {};
+Profile.Profiler.CPU = {};
 
-Profile.Graph.GraphData.read = function (pbf, end) {
-    return pbf.readFields(Profile.Graph.GraphData._readField, {id: "", name: "", time: 0, data: 0}, end);
+Profile.Profiler.CPU.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler.CPU._readField, {threads: []}, end);
 };
-Profile.Graph.GraphData._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.id = pbf.readString();
-    else if (tag === 2) obj.name = pbf.readString();
+Profile.Profiler.CPU._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.threads.push(Profile.Profiler.CPU.Thread.read(pbf, pbf.readVarint() + pbf.pos));
+};
+
+// Profile.Profiler.CPU.Thread ========================================
+
+Profile.Profiler.CPU.Thread = {};
+
+Profile.Profiler.CPU.Thread.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler.CPU.Thread._readField, {name: "", time: 0, children: []}, end);
+};
+Profile.Profiler.CPU.Thread._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.name = pbf.readString();
+    else if (tag === 2) obj.time = pbf.readVarint();
+    else if (tag === 3) obj.children.push(Profile.Profiler.CPU.Thread.Children.read(pbf, pbf.readVarint() + pbf.pos));
+};
+
+// Profile.Profiler.CPU.Thread.Children ========================================
+
+Profile.Profiler.CPU.Thread.Children = {};
+
+Profile.Profiler.CPU.Thread.Children.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler.CPU.Thread.Children._readField, {class: "", method: "", time: 0, children: []}, end);
+};
+Profile.Profiler.CPU.Thread.Children._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.class = pbf.readString();
+    else if (tag === 2) obj.method = pbf.readString();
     else if (tag === 3) obj.time = pbf.readVarint();
-    else if (tag === 4) obj.data = pbf.readDouble();
+    else if (tag === 4) obj.children.push(Profile.Profiler.CPU.Thread.Children.read(pbf, pbf.readVarint() + pbf.pos));
 };
 
-// Profile.SystemInfo ========================================
+// Profile.Info ========================================
 
-Profile.SystemInfo = {};
+Profile.Info = {};
 
-Profile.SystemInfo.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo._readField, {vm: null, cpu: null, memory: null, os: null}, end);
+Profile.Info.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info._readField, {system: null, server: null, java: null}, end);
 };
-Profile.SystemInfo._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.vm = Profile.SystemInfo.VMInfo.read(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 2) obj.cpu = Profile.SystemInfo.CPU.read(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 3) obj.memory = Profile.SystemInfo.Memory.read(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 4) obj.os = Profile.SystemInfo.OS.read(pbf, pbf.readVarint() + pbf.pos);
-};
-
-// Profile.SystemInfo.VMInfo ========================================
-
-Profile.SystemInfo.VMInfo = {};
-
-Profile.SystemInfo.VMInfo.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.VMInfo._readField, {version: "", vendor: "", vm: "", runtime_name: "", runtime_version: "", flags: []}, end);
-};
-Profile.SystemInfo.VMInfo._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.version = pbf.readString();
-    else if (tag === 2) obj.vendor = pbf.readString();
-    else if (tag === 3) obj.vm = pbf.readString();
-    else if (tag === 4) obj.runtime_name = pbf.readString();
-    else if (tag === 5) obj.runtime_version = pbf.readString();
-    else if (tag === 6) obj.flags.push(pbf.readString());
+Profile.Info._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.system = Profile.Info.System.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 2) obj.server = Profile.Info.Server.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 3) obj.java = Profile.Info.Java.read(pbf, pbf.readVarint() + pbf.pos);
 };
 
-// Profile.SystemInfo.CPU ========================================
+// Profile.Info.System ========================================
 
-Profile.SystemInfo.CPU = {};
+Profile.Info.System = {};
 
-Profile.SystemInfo.CPU.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.CPU._readField, {model: "", cores: 0, threads: 0, frequency: 0}, end);
+Profile.Info.System.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.System._readField, {cpu: null, memory: null, os: null}, end);
 };
-Profile.SystemInfo.CPU._readField = function (tag, obj, pbf) {
+Profile.Info.System._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.cpu = Profile.Info.System.CPU.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 2) obj.memory = Profile.Info.System.Memory.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 3) obj.os = Profile.Info.System.OS.read(pbf, pbf.readVarint() + pbf.pos);
+};
+
+// Profile.Info.System.CPU ========================================
+
+Profile.Info.System.CPU = {};
+
+Profile.Info.System.CPU.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.System.CPU._readField, {model: "", cores: 0, threads: 0, frequency: 0}, end);
+};
+Profile.Info.System.CPU._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.model = pbf.readString();
     else if (tag === 2) obj.cores = pbf.readVarint();
     else if (tag === 3) obj.threads = pbf.readVarint();
     else if (tag === 4) obj.frequency = pbf.readVarint();
 };
 
-// Profile.SystemInfo.Memory ========================================
+// Profile.Info.System.Memory ========================================
 
-Profile.SystemInfo.Memory = {};
+Profile.Info.System.Memory = {};
 
-Profile.SystemInfo.Memory.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.Memory._readField, {physical: 0, swap: 0, virtual: 0, debug_symbols: false}, end);
+Profile.Info.System.Memory.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.System.Memory._readField, {physical: 0, swap: 0, virtual: 0, debug_symbols: false}, end);
 };
-Profile.SystemInfo.Memory._readField = function (tag, obj, pbf) {
+Profile.Info.System.Memory._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.physical = pbf.readVarint();
     else if (tag === 2) obj.swap = pbf.readVarint();
     else if (tag === 3) obj.virtual = pbf.readVarint();
     else if (tag === 4) obj.debug_symbols = pbf.readBoolean();
 };
 
-// Profile.SystemInfo.OS ========================================
+// Profile.Info.System.OS ========================================
 
-Profile.SystemInfo.OS = {};
+Profile.Info.System.OS = {};
 
-Profile.SystemInfo.OS.read = function (pbf, end) {
-    return pbf.readFields(Profile.SystemInfo.OS._readField, {manufacturer: "", family: "", version: "", bitness: 0}, end);
+Profile.Info.System.OS.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.System.OS._readField, {manufacturer: "", family: "", version: "", bitness: 0}, end);
 };
-Profile.SystemInfo.OS._readField = function (tag, obj, pbf) {
+Profile.Info.System.OS._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.manufacturer = pbf.readString();
     else if (tag === 2) obj.family = pbf.readString();
     else if (tag === 3) obj.version = pbf.readString();
     else if (tag === 4) obj.bitness = pbf.readVarint();
 };
 
-// Profile.MinecraftInfo ========================================
+// Profile.Info.Server ========================================
 
-Profile.MinecraftInfo = {};
+Profile.Info.Server = {};
 
-Profile.MinecraftInfo.read = function (pbf, end) {
-    return pbf.readFields(Profile.MinecraftInfo._readField, {version: "", online_mode: 0, configs: [], plugins: []}, end);
+Profile.Info.Server.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.Server._readField, {uptime: 0, version: "", online_mode: 0, gcs: [], configs: [], plugins: []}, end);
 };
-Profile.MinecraftInfo._readField = function (tag, obj, pbf) {
-    if (tag === 1) obj.version = pbf.readString();
-    else if (tag === 2) obj.online_mode = pbf.readVarint();
-    else if (tag === 3) obj.configs.push(Profile.MinecraftInfo.Config.read(pbf, pbf.readVarint() + pbf.pos));
-    else if (tag === 4) obj.plugins.push(Profile.MinecraftInfo.Plugin.read(pbf, pbf.readVarint() + pbf.pos));
+Profile.Info.Server._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.uptime = pbf.readVarint();
+    else if (tag === 2) obj.version = pbf.readString();
+    else if (tag === 3) obj.online_mode = pbf.readVarint();
+    else if (tag === 4) obj.gcs.push(Profile.Info.Server.GC.read(pbf, pbf.readVarint() + pbf.pos));
+    else if (tag === 5) obj.configs.push(Profile.Info.Server.Config.read(pbf, pbf.readVarint() + pbf.pos));
+    else if (tag === 6) obj.plugins.push(Profile.Info.Server.Plugin.read(pbf, pbf.readVarint() + pbf.pos));
 };
 
-Profile.MinecraftInfo.OnlineMode = {
+Profile.Info.Server.OnlineMode = {
     "ENABLED": {
         "value": 0,
         "options": {}
@@ -144,41 +164,57 @@ Profile.MinecraftInfo.OnlineMode = {
     }
 };
 
-// Profile.MinecraftInfo.Config ========================================
+// Profile.Info.Server.Config ========================================
 
-Profile.MinecraftInfo.Config = {};
+Profile.Info.Server.Config = {};
 
-Profile.MinecraftInfo.Config.read = function (pbf, end) {
-    return pbf.readFields(Profile.MinecraftInfo.Config._readField, {file: "", content: ""}, end);
+Profile.Info.Server.Config.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.Server.Config._readField, {file: "", content: ""}, end);
 };
-Profile.MinecraftInfo.Config._readField = function (tag, obj, pbf) {
+Profile.Info.Server.Config._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.file = pbf.readString();
     else if (tag === 2) obj.content = pbf.readString();
 };
 
-// Profile.MinecraftInfo.Plugin ========================================
+// Profile.Info.Server.Plugin ========================================
 
-Profile.MinecraftInfo.Plugin = {};
+Profile.Info.Server.Plugin = {};
 
-Profile.MinecraftInfo.Plugin.read = function (pbf, end) {
-    return pbf.readFields(Profile.MinecraftInfo.Plugin._readField, {name: "", version: "", author: ""}, end);
+Profile.Info.Server.Plugin.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.Server.Plugin._readField, {name: "", version: "", author: ""}, end);
 };
-Profile.MinecraftInfo.Plugin._readField = function (tag, obj, pbf) {
+Profile.Info.Server.Plugin._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.name = pbf.readString();
     else if (tag === 2) obj.version = pbf.readString();
     else if (tag === 3) obj.author = pbf.readString();
 };
 
-// Profile.GC ========================================
+// Profile.Info.Server.GC ========================================
 
-Profile.GC = {};
+Profile.Info.Server.GC = {};
 
-Profile.GC.read = function (pbf, end) {
-    return pbf.readFields(Profile.GC._readField, {name: "", total: 0, time: 0, frequency: 0}, end);
+Profile.Info.Server.GC.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.Server.GC._readField, {name: "", total: 0, time: 0, frequency: 0}, end);
 };
-Profile.GC._readField = function (tag, obj, pbf) {
+Profile.Info.Server.GC._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.name = pbf.readString();
     else if (tag === 2) obj.total = pbf.readVarint();
     else if (tag === 3) obj.time = pbf.readDouble();
     else if (tag === 4) obj.frequency = pbf.readVarint();
+};
+
+// Profile.Info.Java ========================================
+
+Profile.Info.Java = {};
+
+Profile.Info.Java.read = function (pbf, end) {
+    return pbf.readFields(Profile.Info.Java._readField, {version: "", vendor: "", vm: "", runtime_name: "", runtime_version: "", flags: []}, end);
+};
+Profile.Info.Java._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.version = pbf.readString();
+    else if (tag === 2) obj.vendor = pbf.readString();
+    else if (tag === 3) obj.vm = pbf.readString();
+    else if (tag === 4) obj.runtime_name = pbf.readString();
+    else if (tag === 5) obj.runtime_version = pbf.readString();
+    else if (tag === 6) obj.flags.push(pbf.readString());
 };

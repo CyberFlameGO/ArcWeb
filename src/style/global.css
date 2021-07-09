@@ -61,7 +61,7 @@ nav li {
     text-align: center;
     font-weight: bolder;
     display: inline-block;
-    padding: 15px 50px 15px;
+    padding: 15px 50px;
 }
 
 nav .active {
@@ -100,7 +100,7 @@ nav .toggle {
 }
 
 .config {
-    padding: 20px 40px 20px 40px;
+    padding: 20px 40px;
     margin: 50px 20px -20px;
     border-radius: 10px;
     background-color: var(--secondary-background-color);

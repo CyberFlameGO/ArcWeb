@@ -19,62 +19,65 @@
             <h1>System</h1>
             <div class="sub-box">
               <h2>CPU</h2>
-              <b>Model:</b> {{profile.system.cpu.model}}
+              <b>Model:</b> {{profile.info.system.cpu.model}}
               <br/>
-              <b>Cores/Threads:</b> {{profile.system.cpu.cores}}/{{profile.system.cpu.threads}}
+              <b>Cores/Threads:</b> {{profile.info.system.cpu.cores}}/{{profile.info.system.cpu.threads}}
               <br/>
-              <b>Frequency:</b> {{(1e-9 * profile.system.cpu.frequency).toFixed(2)}}GHz
+              <b>Frequency:</b> {{(1e-9 * profile.info.system.cpu.frequency).toFixed(2)}}GHz
             </div>
             <div class="sub-box">
               <h2>Memory</h2>
-              <b>Physical:</b> {{bytesToSize(profile.system.memory.physical)}}
+              <b>Physical:</b> {{bytesToSize(profile.info.system.memory.physical)}}
               <br/>
-              <b>Swap:</b> {{bytesToSize(profile.system.memory.swap)}}
+              <b>Swap:</b> {{bytesToSize(profile.info.system.memory.swap)}}
               <br/>
-              <b>Virtual:</b> {{bytesToSize(profile.system.memory.virtual)}}
+              <b>Virtual:</b> {{bytesToSize(profile.info.system.memory.virtual)}}
               <br/>
-              <b>Total: </b> {{bytesToSize(profile.system.memory.physical + profile.system.memory.swap)}}
+              <b>Total: </b> {{bytesToSize(profile.info.system.memory.physical + profile.info.system.memory.swap)}}
             </div>
             <div class="sub-box">
               <h2>Operating System</h2>
-              {{profile.system.os.manufacturer}} {{profile.system.os.family}} {{profile.system.os.version}} ({{profile.system.os.bitness}} bit)
+              {{profile.info.system.os.manufacturer}} {{profile.info.system.os.family}}
+              <br/>
+              {{profile.info.system.os.version}} ({{profile.info.system.os.bitness}} bit)
             </div>
           </div>
           <div class="box">
             <h1>Server Info</h1>
             <p>
-              <b>Version:</b> {{profile.minecraft.version}}
+              <b>Uptime:</b> {{formatTime(profile.info.server.uptime)}}
               <br/>
-              <b>Online Mode:</b> {{onlineModeText(profile.minecraft.online_mode)}}
-              <GC v-for="gc in profile.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
+              <b>Version:</b> {{profile.info.server.version}}
+              <br/>
+              <b>Online Mode:</b> {{onlineModeText(profile.info.server.online_mode)}}
+              <GC v-for="gc in profile.info.server.gcs" :name="gc.name" :total="gc.total" :time="gc.time" :frequency="gc.frequency"/>
             </p>
           </div>
           <div class="box">
-            <h1>Virtual Machine</h1>
+            <h1>Java</h1>
             <p>
-              <b>Version:</b> {{profile.system.vm.version}}
+              <b>Version:</b> {{profile.info.java.version}}
               <br/>
-              <b>Vendor:</b> {{profile.system.vm.vendor}}
+              <b>Vendor:</b> {{profile.info.java.vendor}}
               <br/>
-              <b>VM:</b> {{profile.system.vm.vm}}
+              <b>VM:</b> {{profile.info.java.vm}}
               <br/>
-              <b>Runtime Name:</b> {{profile.system.vm.runtime_name}}
+              <b>Runtime Name:</b> {{profile.info.java.runtime_name}}
               <br/>
-              <b>Runtime Version:</b> {{profile.system.vm.runtime_version}}
+              <b>Runtime Version:</b> {{profile.info.java.runtime_version}}
               <br/>
               <br/>
             </p>
             <b>Flags:</b>
-            <p class="text-box">{{profile.system.vm.flags.join(' ')}}</p>
+            <p class="text-box">{{profile.info.java.flags.join(' ')}}</p>
           </div>
         </div>
-        <Graph :graph="profile.graph"/>
       </template>
       <template v-else-if="view === 1">
         todo: cpu profiler
       </template>
       <template v-else-if="view === 2">
-        <div v-if="!profile.system.memory.debug_symbols" class="page">
+        <div v-if="!profile.info.system.memory.debug_symbols" class="page">
           <br/>
           <h1>Memory Profile Disabled</h1>
           <p>This profile did capture memory information, are debug symbols installed?</p>
@@ -84,7 +87,7 @@
         </div>
       </template>
       <template class="configs" v-else-if="view === 3">
-        <Config v-for="config in profile.minecraft.configs" :filename="config.file" :content="config.content"/>
+        <Config v-for="config in profile.info.server.configs" :filename="config.file" :content="config.content"/>
       </template>
     </template>
   </div>
@@ -92,12 +95,11 @@
 
 <script>
 import Pbf from 'pbf'
-import { Profile } from '@/proto'
+import { Profile } from '../proto'
 
-import Config from '@/components/viewer/Config'
-import GC from '@/components/viewer/GC'
-import Graph from '@/components/viewer/Graph'
-import Error404 from '@/views/error/Error404'
+import Config from './viewer/Config'
+import GC from './viewer/GC'
+import Error404 from '../views/error/Error404'
 
 export default {
   name: 'Viewer',
@@ -126,6 +128,23 @@ export default {
       const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
       const i = Math.floor(Math.log(bytes) / Math.log(1024));
       return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + sizes[i];
+    },
+    formatTime(num) {
+      if (num <= 0) {
+        return '0s'
+      }
+
+      let second = num / 1000
+      const minute = second / 60
+      second = second % 60
+
+      if (minute.toString().split('.')[0] !== '0') {
+        return `${Math.round(minute)}m`
+      } else if (second.toString().split('.')[0] !== '0') {
+        return `${Math.round(second)}s`
+      } else {
+        return `${num}ms`
+      }
     }
   },
   beforeMount() {
@@ -140,7 +159,6 @@ export default {
   components: {
     Config,
     GC,
-    Graph,
     Error404
   }
 }
