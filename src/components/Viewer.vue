@@ -74,16 +74,16 @@
         </div>
       </template>
       <template v-else-if="view === 1">
-        todo: cpu profiler
+        {{profile}}
       </template>
       <template v-else-if="view === 2">
-        <div v-if="!profile.info.system.memory.debug_symbols" class="page">
+        <div v-if="!profile.profiler.memory.debug_symbols" class="page">
           <br/>
           <h1>Memory Profile Disabled</h1>
           <p>This profile did capture memory information, are debug symbols installed?</p>
         </div>
         <div v-else>
-          todo: memory profiler
+          todo: memory profile
         </div>
       </template>
       <template class="configs" v-else-if="view === 3">

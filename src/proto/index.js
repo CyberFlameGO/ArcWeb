@@ -17,10 +17,11 @@ Profile._readField = function (tag, obj, pbf) {
 Profile.Profiler = {};
 
 Profile.Profiler.read = function (pbf, end) {
-    return pbf.readFields(Profile.Profiler._readField, {cpu: null}, end);
+    return pbf.readFields(Profile.Profiler._readField, {cpu: null, memory: null}, end);
 };
 Profile.Profiler._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.cpu = Profile.Profiler.CPU.read(pbf, pbf.readVarint() + pbf.pos);
+    else if (tag === 2) obj.memory = Profile.Profiler.Memory.read(pbf, pbf.readVarint() + pbf.pos);
 };
 
 // Profile.Profiler.CPU ========================================
@@ -59,6 +60,45 @@ Profile.Profiler.CPU.Thread.Children._readField = function (tag, obj, pbf) {
     else if (tag === 2) obj.method = pbf.readString();
     else if (tag === 3) obj.time = pbf.readVarint();
     else if (tag === 4) obj.children.push(Profile.Profiler.CPU.Thread.Children.read(pbf, pbf.readVarint() + pbf.pos));
+};
+
+// Profile.Profiler.Memory ========================================
+
+Profile.Profiler.Memory = {};
+
+Profile.Profiler.Memory.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler.Memory._readField, {debug_symbols: false, threads: []}, end);
+};
+Profile.Profiler.Memory._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.debug_symbols = pbf.readBoolean();
+    else if (tag === 2) obj.threads.push(Profile.Profiler.Memory.Thread.read(pbf, pbf.readVarint() + pbf.pos));
+};
+
+// Profile.Profiler.Memory.Thread ========================================
+
+Profile.Profiler.Memory.Thread = {};
+
+Profile.Profiler.Memory.Thread.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler.Memory.Thread._readField, {name: "", time: 0, children: []}, end);
+};
+Profile.Profiler.Memory.Thread._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.name = pbf.readString();
+    else if (tag === 2) obj.time = pbf.readVarint();
+    else if (tag === 3) obj.children.push(Profile.Profiler.Memory.Thread.Children.read(pbf, pbf.readVarint() + pbf.pos));
+};
+
+// Profile.Profiler.Memory.Thread.Children ========================================
+
+Profile.Profiler.Memory.Thread.Children = {};
+
+Profile.Profiler.Memory.Thread.Children.read = function (pbf, end) {
+    return pbf.readFields(Profile.Profiler.Memory.Thread.Children._readField, {class: "", method: "", bytes: 0, children: []}, end);
+};
+Profile.Profiler.Memory.Thread.Children._readField = function (tag, obj, pbf) {
+    if (tag === 1) obj.class = pbf.readString();
+    else if (tag === 2) obj.method = pbf.readString();
+    else if (tag === 3) obj.bytes = pbf.readVarint();
+    else if (tag === 4) obj.children.push(Profile.Profiler.Memory.Thread.Children.read(pbf, pbf.readVarint() + pbf.pos));
 };
 
 // Profile.Info ========================================
@@ -106,13 +146,12 @@ Profile.Info.System.CPU._readField = function (tag, obj, pbf) {
 Profile.Info.System.Memory = {};
 
 Profile.Info.System.Memory.read = function (pbf, end) {
-    return pbf.readFields(Profile.Info.System.Memory._readField, {physical: 0, swap: 0, virtual: 0, debug_symbols: false}, end);
+    return pbf.readFields(Profile.Info.System.Memory._readField, {physical: 0, swap: 0, virtual: 0}, end);
 };
 Profile.Info.System.Memory._readField = function (tag, obj, pbf) {
     if (tag === 1) obj.physical = pbf.readVarint();
     else if (tag === 2) obj.swap = pbf.readVarint();
     else if (tag === 3) obj.virtual = pbf.readVarint();
-    else if (tag === 4) obj.debug_symbols = pbf.readBoolean();
 };
 
 // Profile.Info.System.OS ========================================
