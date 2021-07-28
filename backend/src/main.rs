@@ -62,7 +62,7 @@ async fn new(request: HttpRequest, bytes: Bytes) -> impl Responder {
     HttpResponse::Ok().body(format!("{{ \"error\": false, \"message\": \"{}\" }}", key))
 }
 
-#[get("/raw/{id}")]
+#[get("/raw/{key}")]
 async fn raw(_: HttpRequest, Path(key): Path<String>) -> impl Responder {
     if !fs::metadata(format!("data/{}", key)).is_ok() {
         return HttpResponse::build(StatusCode::NOT_FOUND).content_type("application/json")
