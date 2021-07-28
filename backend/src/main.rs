@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
 
     fs::create_dir_all("data")?;
     thread::spawn(|| {
-        let wait = Duration::from_millis(ms("30d").unwrap() as u64);
+        let wait = Duration::from_millis(1800000);
 
         loop {
             let start = Instant::now();
