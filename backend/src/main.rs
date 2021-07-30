@@ -1,7 +1,6 @@
 use actix_web::{get, post, HttpServer, App, Responder, HttpResponse, HttpRequest};
 use actix_web::http::{HeaderValue, StatusCode};
 use actix_web::web::{Path, Bytes, Buf};
-use ms_converter::ms;
 use rand::Rng;
 use rand::distributions::Alphanumeric;
 use std::env::var;
@@ -14,7 +13,7 @@ use std::process::Command;
 
 #[actix_web::main]
 async fn main() -> Result<()> {
-    let ip: String = var("ARC_IP").unwrap_or(String::from("127.0.0.1"));
+    let ip: String = var("ARC_IP").unwrap_or(String::from("0.0.0.0"));
     let port: i32 = var("ARC_PORT").unwrap_or(String::from("5000")).parse().unwrap_or(5000);
 
     fs::create_dir_all("data")?;
