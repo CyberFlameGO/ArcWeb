@@ -13,9 +13,6 @@ use std::process::Command;
 
 #[actix_web::main]
 async fn main() -> Result<()> {
-    let ip: String = var("ARC_IP").unwrap_or(String::from("0.0.0.0"));
-    let port: i32 = var("ARC_PORT").unwrap_or(String::from("5000")).parse().unwrap_or(5000);
-
     fs::create_dir_all("data")?;
     thread::spawn(|| {
         let wait = Duration::from_millis(1800000);
@@ -36,12 +33,12 @@ async fn main() -> Result<()> {
         }
     });
 
-    println!("Started web server on: {}:{}", ip, port);
+    println!("Started web server on: 127.0.0.1:5000");
     HttpServer::new(|| {
         App::new()
             .service(new)
             .service(raw)
-    }).bind(format!("{}:{}", ip, port))?.run().await
+    }).bind("127.0.0.1:5000")?.run().await
 }
 
 #[post("/new")]
